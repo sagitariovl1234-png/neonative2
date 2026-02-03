@@ -1,0 +1,794 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Test de Personalidad Sustentable</title>
+
+<style>
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: linear-gradient(180deg, #e8f5e9, #e3f2fd);
+    color: #1b1b1b;
+    overflow-x: hidden;
+}
+
+.container {
+    max-width: 900px;
+    margin: auto;
+    padding: 30px 20px;
+}
+
+h1, h2 {
+    text-align: center;
+}
+
+.fade {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.6s ease, transform 0.6s ease;
+}
+
+.fade.show {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.question {
+    margin: 30px 0;
+}
+
+.answers button {
+    display: block;
+    width: 100%;
+    margin: 10px 0;
+    padding: 14px;
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+    background: rgba(255,255,255,0.85);
+    backdrop-filter: blur(4px);
+    font-size: 16px;
+    transition: transform 0.2s ease, background 0.3s ease, box-shadow 0.3s ease;
+}
+
+.answers button:hover {
+    background: #c8e6c9;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 18px rgba(0,0,0,0.12);
+}
+
+.answers button:active {
+    transform: scale(0.98);
+}
+
+#result {
+    display: none;
+    text-align: center;
+}
+
+canvas {
+    display: block;
+    margin: 25px auto;
+    background: rgba(255,255,255,0.9);
+    border-radius: 16px;
+}
+
+.percentages {
+    text-align: left;
+    max-width: 400px;
+    margin: 20px auto 0;
+    font-size: 15px;
+}
+#progressContainer {
+    width: 100%;
+    height: 8px;
+    background: rgba(0,0,0,0.1);
+    border-radius: 10px;
+    overflow: hidden;
+    margin: 25px 0;
+}
+
+#progressBar {
+    height: 100%;
+    width: 0%;
+    background: linear-gradient(90deg, #66bb6a, #42a5f5);
+    transition: width 0.6s ease;
+}
+.back-btn {
+    margin-top: 25px;
+    padding: 12px 20px;
+    border: none;
+    border-radius: 14px;
+    background: rgba(255,255,255,0.85);
+    backdrop-filter: blur(6px);
+    cursor: pointer;
+    font-size: 14px;
+    color: #333;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    opacity: 0;
+    transform: translateY(10px);
+    animation: fadeInUp 0.5s forwards;
+    transition: background 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
+}
+
+.back-btn:hover {
+    background: #e0f2f1;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(0,0,0,0.15);
+}
+
+@keyframes fadeInUp {
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+.neo-header {
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  padding: 16px 40px;
+
+  background: rgba(15, 20, 30, 0.55);
+  backdrop-filter: blur(18px) saturate(140%);
+  -webkit-backdrop-filter: blur(18px) saturate(140%);
+
+  border-bottom: 1px solid rgba(0, 255, 180, 0.25);
+  box-shadow:
+    0 8px 30px rgba(0, 0, 0, 0.4),
+    inset 0 0 20px rgba(0, 255, 180, 0.08);
+
+  transition: all 0.4s ease;
+}
+
+.neo-logo {
+  font-size: 1.4rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+
+  color: #b9ffe8;
+  text-shadow:
+    0 0 6px rgba(0, 255, 200, 0.6),
+    0 0 18px rgba(0, 255, 200, 0.3);
+}
+
+.neo-nav {
+  display: flex;
+  gap: 24px;
+}
+
+.neo-nav a {
+  position: relative;
+  text-decoration: none;
+  font-size: 0.95rem;
+  color: rgba(220, 255, 245, 0.85);
+
+  padding: 6px 10px;
+  border-radius: 10px;
+
+  transition: all 0.3s ease;
+}
+
+.neo-nav a::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  bottom: -4px;
+  width: 0%;
+  height: 2px;
+  background: linear-gradient(90deg, #00ffd5, #7cffea);
+  box-shadow: 0 0 8px rgba(0, 255, 213, 0.8);
+  transform: translateX(-50%);
+  transition: width 0.3s ease;
+}
+
+.neo-nav a:hover {
+  color: #eafff9;
+  background: rgba(0, 255, 200, 0.08);
+}
+
+.neo-nav a:hover::after {
+  width: 70%;
+}
+
+
+</style>
+</head>
+
+<body>
+  <header class="neo-header">
+  <div class="neo-logo">NEO NATIVE</div>
+
+  <nav class="neo-nav">
+    <a href="Aqua.html">Inicio</a>
+    <a href="test.html">Test Sustentable</a>
+    <a href="arquetipos.html">Arquetipos</a>
+    <a href="manifiesto.html">Manifiesto</a>
+    <a href="proyectos.html">Proyectos</a>
+    <a href="contacto.html">Contacto</a>
+  </nav>
+</header>
+
+<div class="container">
+
+<h1>Test de Personalidad para el Desarrollo Sustentable</h1>
+<div id="progressContainer">
+  <div id="progressBar"></div>
+</div>
+
+
+<div id="test" class="fade"></div>
+
+<div id="result" class="fade">
+    <h2 id="typeTitle"></h2>
+    <canvas id="canvas" width="420" height="260"></canvas>
+    <p id="description"></p>
+    <div class="percentages" id="percentages"></div>
+</div>
+
+</div>
+
+<script>
+const types = {
+    raiz: {
+        name: "Raíz",
+        description: `Las personas del arquetipo Raíz entienden el desarrollo sustentable como un acto de custodia. No buscan protagonismo ni resultados inmediatos; su foco está en preservar aquello que permite que los sistemas sigan existiendo. Ven la naturaleza no como un recurso, sino como una base viva que sostiene todo lo demás.
+
+Su forma de pensar es conservadora en el mejor sentido de la palabra: proteger, mantener, evitar daños irreversibles. Detectan rápidamente cuándo un proyecto “verde” cruza una línea invisible y empieza a degradar aquello que dice defender. Por eso suelen inclinarse hacia la conservación de ecosistemas, restauración ambiental, manejo responsable del territorio y prácticas que imitan procesos naturales.
+
+En equipos, la Raíz aporta estabilidad y coherencia ética. Es quien recuerda los límites ecológicos cuando otros se dejan llevar por la eficiencia o la innovación. Su presencia evita decisiones impulsivas que generan impactos ocultos a largo plazo.
+
+Su mayor contribución al desarrollo sustentable es poner freno cuando hace falta. Gracias a la Raíz, los proyectos no se vuelven extractivos, incluso cuando son técnicamente exitosos o económicamente atractivos.
+
+Su riesgo está en la rigidez. Puede resistirse al cambio incluso cuando es necesario, o desconfiar en exceso de la tecnología. Cuando trabaja en equilibrio con otros arquetipos, se convierte en una base sólida; cuando actúa sola, puede inmovilizar el sistema.`,
+        animate: animateRoots
+    },
+    rio: {
+        name: "Río",
+        description: `El arquetipo Río percibe el mundo como una red de flujos interconectados: agua, energía, materiales, información, tiempo. Para estas personas, la sustentabilidad no es un ideal abstracto, sino un problema complejo que puede analizarse, diseñarse y optimizarse.
+
+Su enfoque es técnico, lógico y sistémico. Detectan desperdicios donde otros ven normalidad y oportunidades donde otros solo ven límites. Son quienes diseñan sistemas de captación y purificación de agua, optimizan procesos industriales, mejoran infraestructuras urbanas y convierten ideas ecológicas en soluciones replicables.
+
+En equipos, el Río baja las ideas a tierra. Transforma visiones amplias en modelos funcionales, indicadores medibles y procesos sostenibles en el tiempo. Sin este arquetipo, muchos proyectos ambientales se quedan en el discurso o dependen demasiado del esfuerzo manual.
+
+Su mayor contribución al desarrollo sustentable es hacerlo viable a gran escala. El Río permite que la sostenibilidad deje de ser artesanal y se convierta en política pública, industria responsable o infraestructura urbana eficiente.
+
+Su riesgo está en reducir la realidad a números. Puede subestimar factores culturales, emocionales o sociales que determinan si una solución será aceptada o cuidada. En equilibrio con arquetipos humanos y éticos, su impacto es enorme.`,
+        animate: animateRiver
+    },
+    viento: {
+        name: "Viento",
+        description: `El arquetipo Viento encarna la urgencia del cambio. Estas personas ven problemas estructurales y no entienden por qué el sistema sigue funcionando igual. Su energía es incómoda, disruptiva y necesaria cuando todo está estancado.
+
+Piensan en términos de transformación, no de ajuste. Cuestionan modelos obsoletos, desafían normas ineficientes y empujan soluciones nuevas incluso cuando no están completamente pulidas. Suelen encontrarse en activismo, emprendimiento social, innovación tecnológica o liderazgo de movimientos ambientales.
+
+En equipos, el Viento es el detonador. Aporta velocidad, visibilidad y presión. Es quien pone el tema sobre la mesa, fuerza conversaciones difíciles y evita que los proyectos se diluyan en planificación eterna.
+
+Su mayor contribución al desarrollo sustentable es iniciar el movimiento. Sin este arquetipo, muchas ideas nunca se materializan y muchos sistemas dañinos siguen operando por inercia.
+
+Su riesgo es el desgaste. Puede quemarse rápido, romper alianzas valiosas o implementar soluciones poco sostenibles a largo plazo. Cuando el Viento trabaja junto a arquetipos más estructurales, su fuerza se convierte en transformación real y duradera.`,
+        animate: animateWind
+    },
+    colmena: {
+        name: "Colmena",
+        description: `La Colmena entiende algo fundamental: no existe desarrollo sustentable sin personas. Para este arquetipo, cualquier solución que ignore el factor humano está condenada al fracaso, por muy ecológica o eficiente que sea.
+
+Su foco está en la comunidad, la equidad y la participación. Se preguntan quién se beneficia, quién queda fuera y quién sostendrá el proyecto cuando los impulsores iniciales se vayan. Suelen trabajar en educación ambiental, gobernanza local, cooperativas, proyectos comunitarios y mediación social.
+
+En equipos, la Colmena es el puente. Traduce conceptos técnicos en lenguaje comprensible, facilita acuerdos y cuida las relaciones. Gracias a ella, los proyectos se adoptan, se cuidan y se mantienen vivos.
+
+Su mayor contribución al desarrollo sustentable es garantizar permanencia. Sin aceptación social, ningún sistema sobrevive. La Colmena hace que la sostenibilidad no sea elitista ni impuesta.
+
+Su riesgo está en el exceso de consenso. Puede evitar decisiones difíciles por miedo al conflicto o ralentizar procesos necesarios. En equilibrio con arquetipos decisivos y técnicos, se convierte en una fuerza de cohesión poderosa.`,
+        animate: animateHive
+    },
+    semilla: {
+        name: "Semilla",
+        description: `El arquetipo Semilla piensa en escalas largas. No se obsesiona con resultados inmediatos porque entiende que el verdadero cambio ocurre a través del aprendizaje, la cultura y la transmisión de conocimiento.
+
+Estas personas se enfocan en educación, investigación, reflexión y diseño de futuros posibles. Observan patrones, documentan procesos y siembran ideas que otros verán florecer años después. Son quienes conectan la sustentabilidad con valores, narrativas y sentido.
+
+En equipos, la Semilla aporta profundidad y visión. Ayuda a entender por qué se hacen las cosas y qué consecuencias tendrán más allá del proyecto actual. Sin ella, la sostenibilidad puede volverse mecánica o vacía de propósito.
+
+Su mayor contribución al desarrollo sustentable es crear continuidad generacional. La Semilla forma personas, no solo sistemas.
+
+Su riesgo está en la abstracción. Puede quedarse demasiado en la teoría o perder contacto con la urgencia del presente. Cuando se equilibra con acción y estructura, se convierte en el alma del proyecto.`,
+        animate: animateSeed
+    }
+};
+
+const questions = [
+{
+    q: "Encuentras un río contaminado cerca de tu comunidad.",
+    a: [
+        ["raiz", "Proteger y conservar el entorno"],
+        ["rio", "Analizar causas y flujo"],
+        ["viento", "Crear una solución nueva"],
+        ["colmena", "Organizar a la comunidad"],
+        ["semilla", "Educar para evitar futuros daños"]
+    ]
+},
+{
+    q: "En proyectos ambientales tú sueles:",
+    a: [
+        ["raiz", "Mantener lo que funciona"],
+        ["rio", "Optimizar procesos"],
+        ["viento", "Innovar"],
+        ["colmena", "Coordinar personas"],
+        ["semilla", "Pensar a largo plazo"]
+    ]
+},
+{
+    q: "Cuando los recursos son limitados:",
+    a: [
+        ["rio", "Aprovechar cada recurso"],
+        ["raiz", "Reducir consumo"],
+        ["viento", "Buscar alternativas"],
+        ["colmena", "Compartir"],
+        ["semilla", "Invertir en educación"]
+    ]
+},
+
+{
+  q: "Tu colonia quiere implementar un sistema de captación de agua.",
+  a: [
+    ["raiz", "Asegurar que no dañe el ecosistema local"],
+    ["rio", "Diseñar un sistema eficiente y medible"],
+    ["viento", "Probar una solución innovadora"],
+    ["colmena", "Involucrar a todos los vecinos"],
+    ["semilla", "Pensar en su impacto a largo plazo"]
+  ]
+},
+
+{
+  q: "Cuando ves un proyecto “verde” patrocinado por una gran empresa, piensas:",
+  a: [
+    ["raiz", "Hay que ver si realmente protege la naturaleza"],
+    ["rio", "Revisemos datos y resultados reales"],
+    ["viento", "Puede ser una oportunidad de cambio"],
+    ["colmena", "Depende de cómo impacte a la comunidad"],
+    ["semilla", "Lo importante es lo que deja a futuro"]
+  ]
+},
+
+{
+  q: "Si un proyecto sustentable empieza a fallar:",
+  a: [
+    ["raiz", "Regresar a lo esencial"],
+    ["rio", "Detectar el punto de fuga"],
+    ["viento", "Cambiar el enfoque sin miedo"],
+    ["colmena", "Hablar con las personas involucradas"],
+    ["semilla", "Aprender del error"]
+  ]
+},
+
+{
+  q: "Tu forma natural de aprender sobre sostenibilidad es:",
+  a: [
+    ["raiz", "Observando la naturaleza"],
+    ["rio", "Estudiando sistemas y datos"],
+    ["viento", "Experimentando"],
+    ["colmena", "Escuchando a otros"],
+    ["semilla", "Investigando y reflexionando"]
+  ]
+},
+
+{
+  q: "En un equipo ambiental tú sueles ser quien:",
+  a: [
+    ["raiz", "Mantiene la coherencia"],
+    ["rio", "Optimiza recursos"],
+    ["viento", "Propone ideas nuevas"],
+    ["colmena", "Une al grupo"],
+    ["semilla", "Recuerda el propósito"]
+  ]
+},
+
+{
+  q: "Si solo pudieras elegir una prioridad:",
+  a: [
+    ["raiz", "Proteger ecosistemas"],
+    ["rio", "Usar mejor los recursos"],
+    ["viento", "Transformar el sistema"],
+    ["colmena", "Reducir desigualdad"],
+    ["semilla", "Formar conciencia"]
+  ]
+},
+
+{
+  q: "Cuando hay conflicto entre progreso y conservación:",
+  a: [
+    ["raiz", "La naturaleza es el límite"],
+    ["rio", "Buscar equilibrio técnico"],
+    ["viento", "Romper el modelo actual"],
+    ["colmena", "Escuchar a todos"],
+    ["semilla", "Pensar en generaciones futuras"]
+  ]
+},
+
+{
+  q: "Un proyecto sustentable es exitoso cuando:",
+  a: [
+    ["raiz", "El entorno mejora"],
+    ["rio", "El sistema es eficiente"],
+    ["viento", "Cambia la forma de pensar"],
+    ["colmena", "La gente lo adopta"],
+    ["semilla", "Deja aprendizaje duradero"]
+  ]
+},
+
+{
+  q: "Tu reacción ante una crisis ambiental es:",
+  a: [
+    ["raiz", "Proteger lo que queda"],
+    ["rio", "Analizar causas"],
+    ["viento", "Actuar de inmediato"],
+    ["colmena", "Organizar personas"],
+    ["semilla", "Comprender el patrón"]
+  ]
+},
+
+{
+  q: "Lo que más te frustra del mundo actual es:",
+  a: [
+    ["raiz", "La destrucción de la naturaleza"],
+    ["rio", "El desperdicio"],
+    ["viento", "La lentitud del cambio"],
+    ["colmena", "La falta de cooperación"],
+    ["semilla", "La falta de conciencia"]
+  ]
+},
+{
+  q: "Si una solución sustentable es costosa pero muy efectiva:",
+  a: [
+    ["raiz", "Evaluar si el ecosistema realmente lo necesita"],
+    ["rio", "Analizar costo-beneficio"],
+    ["viento", "Buscar una alternativa disruptiva"],
+    ["colmena", "Ver si la comunidad puede sostenerla"],
+    ["semilla", "Pensar si educa para futuras mejoras"]
+  ]
+},
+
+{
+  q: "Tu reacción ante normas ambientales estrictas es:",
+  a: [
+    ["raiz", "Son necesarias para proteger"],
+    ["rio", "Depende de cómo se apliquen"],
+    ["viento", "A veces frenan el cambio real"],
+    ["colmena", "Importa que todos las entiendan"],
+    ["semilla", "Son parte de un proceso mayor"]
+  ]
+},
+
+{
+  q: "Cuando una comunidad rechaza un proyecto verde:",
+  a: [
+    ["raiz", "Tal vez el entorno no lo necesita"],
+    ["rio", "Algo falla en el diseño"],
+    ["viento", "Hace falta sacudir conciencias"],
+    ["colmena", "No se comunicó bien"],
+    ["semilla", "Falta formación previa"]
+  ]
+},
+
+{
+  q: "En una ciudad ideal, lo más importante sería:",
+  a: [
+    ["raiz", "Espacios verdes funcionales"],
+    ["rio", "Infraestructura eficiente"],
+    ["viento", "Innovación constante"],
+    ["colmena", "Vida comunitaria"],
+    ["semilla", "Educación ambiental integrada"]
+  ]
+},
+
+{
+  q: "Cuando tomas decisiones difíciles sueles:",
+  a: [
+    ["raiz", "Cuidar lo esencial"],
+    ["rio", "Evaluar consecuencias"],
+    ["viento", "Arriesgar si es necesario"],
+    ["colmena", "Consultar a otros"],
+    ["semilla", "Pensar en el largo plazo"]
+  ]
+},
+
+{
+  q: "Tu relación con la tecnología sustentable es:",
+  a: [
+    ["raiz", "Útil si no invade la naturaleza"],
+    ["rio", "Una herramienta clave"],
+    ["viento", "Un campo para romper paradigmas"],
+    ["colmena", "Debe ser accesible"],
+    ["semilla", "Debe enseñar a usarla"]
+  ]
+},
+
+{
+  q: "Si un proyecto verde genera ganancias pero daña socialmente:",
+  a: [
+    ["raiz", "No es sustentable"],
+    ["rio", "Hay que ajustar variables"],
+    ["viento", "Hay que cambiar el modelo"],
+    ["colmena", "Debe redistribuir beneficios"],
+    ["semilla", "Debe replantearse desde la base"]
+  ]
+},
+
+{
+  q: "Cuando piensas en el futuro del planeta:",
+  a: [
+    ["raiz", "Te preocupa la pérdida natural"],
+    ["rio", "Piensas en gestión de recursos"],
+    ["viento", "Imaginas un cambio radical"],
+    ["colmena", "Te preocupa la cohesión social"],
+    ["semilla", "Piensas en nuevas generaciones"]
+  ]
+},
+
+{
+  q: "Lo que más valoras en un líder ambiental es:",
+  a: [
+    ["raiz", "Respeto por la naturaleza"],
+    ["rio", "Capacidad técnica"],
+    ["viento", "Valentía para romper reglas"],
+    ["colmena", "Empatía"],
+    ["semilla", "Visión educativa"]
+  ]
+},
+
+{
+  q: "Si un proyecto tarda años en mostrar resultados:",
+  a: [
+    ["raiz", "Es parte del proceso natural"],
+    ["rio", "Mientras sea medible, está bien"],
+    ["viento", "Debe mostrar impacto antes"],
+    ["colmena", "La gente debe entenderlo"],
+    ["semilla", "Los frutos siempre tardan"]
+  ]
+},
+
+{
+  q: "Tu papel ideal en una crisis ambiental global sería:",
+  a: [
+    ["raiz", "Proteger zonas críticas"],
+    ["rio", "Optimizar recursos disponibles"],
+    ["viento", "Impulsar acción inmediata"],
+    ["colmena", "Coordinar personas"],
+    ["semilla", "Documentar y enseñar"]
+  ]
+},
+
+{
+  q: "Cuando algo funciona pero no es sustentable:",
+  a: [
+    ["raiz", "Debe detenerse"],
+    ["rio", "Debe mejorarse"],
+    ["viento", "Debe reemplazarse"],
+    ["colmena", "Debe discutirse"],
+    ["semilla", "Debe entenderse primero"]
+  ]
+},
+
+{
+  q: "Tu mayor fortaleza frente a problemas complejos es:",
+  a: [
+    ["raiz", "Estabilidad"],
+    ["rio", "Análisis"],
+    ["viento", "Iniciativa"],
+    ["colmena", "Comunicación"],
+    ["semilla", "Comprensión profunda"]
+  ]
+}
+
+];
+
+let scores = { raiz:0, rio:0, viento:0, colmena:0, semilla:0 };
+let current = 0;
+let answerHistory = [];
+
+
+const testDiv = document.getElementById("test");
+const resultDiv = document.getElementById("result");
+
+function renderQuestion() {
+    updateProgress();
+    testDiv.classList.remove("show");
+    setTimeout(() => {
+        if (current >= questions.length) {
+            showResult();
+            return;
+        }
+        const q = questions[current];
+        testDiv.innerHTML = `
+  <div class="question">
+    <h2>${q.q}</h2>
+
+    <div class="answers">
+      ${q.a.map(a =>
+        `<button onclick="answer('${a[0]}')">${a[1]}</button>`
+      ).join("")}
+    </div>
+
+    ${current > 0 ? `
+      <div style="text-align:left;">
+        <button class="back-btn" onclick="goBack()">
+          ⬅ Volver a la pregunta anterior
+        </button>
+      </div>
+    ` : ""}
+  </div>
+`;
+        testDiv.classList.add("show");
+    }, 300);
+}
+
+function answer(type) {
+    scores[type]++;
+    answerHistory.push(type);
+    current++;
+    renderQuestion();
+}
+
+function goBack() {
+    if (current === 0) return;
+
+    current--;
+
+    const lastType = answerHistory.pop();
+    scores[lastType]--;
+
+    renderQuestion();
+    updateProgress();
+}
+
+
+
+
+
+
+function showResult() {
+    testDiv.style.display = "none";
+    resultDiv.style.display = "block";
+
+    setTimeout(() => resultDiv.classList.add("show"), 100);
+
+    const total = Object.values(scores).reduce((a,b)=>a+b,0);
+    const winner = Object.keys(scores).reduce((a,b)=> scores[a]>scores[b]?a:b);
+
+    document.getElementById("typeTitle").innerText = `Tu arquetipo es: ${types[winner].name}`;
+    document.getElementById("description").innerText = types[winner].description;
+
+    let percentHTML = "<h3>Porcentajes</h3>";
+    for (let t in scores) {
+        percentHTML += `${types[t].name}: ${Math.round(scores[t]/total*100)}%<br>`;
+    }
+    document.getElementById("percentages").innerHTML = percentHTML;
+
+    const ctx = document.getElementById("canvas").getContext("2d");
+    types[winner].animate(ctx);
+}
+
+function updateProgress() {
+    const percent = (current / questions.length) * 100;
+    document.getElementById("progressBar").style.width = percent + "%";
+}
+
+renderQuestion();
+
+  const header = document.querySelector('.neo-header');
+
+  window.addEventListener('scroll', () => {
+    if (window.scrollY > 20) {
+      header.style.background = 'rgba(10, 15, 25, 0.75)';
+      header.style.boxShadow = '0 10px 40px rgba(0,0,0,0.6)';
+    } else {
+      header.style.background = 'rgba(15, 20, 30, 0.55)';
+      header.style.boxShadow = '0 8px 30px rgba(0,0,0,0.4)';
+    }
+  });
+
+
+
+
+/* ===== CANVAS ANIMATIONS ===== */
+
+function animateRoots(ctx) {
+    let t = 0;
+    function loop() {
+        ctx.clearRect(0,0,420,260);
+        ctx.strokeStyle = "#2e7d32";
+        for(let i=0;i<8;i++){
+            ctx.beginPath();
+            ctx.moveTo(210,260);
+            ctx.lineTo(
+                210 + Math.sin(t+i)*40,
+                120 + Math.cos(t+i)*20
+            );
+            ctx.stroke();
+        }
+        t += 0.02;
+        requestAnimationFrame(loop);
+    }
+    loop();
+}
+
+function animateRiver(ctx) {
+    let t = 0;
+    function loop() {
+        ctx.clearRect(0,0,420,260);
+        ctx.strokeStyle = "#0288d1";
+        ctx.beginPath();
+        ctx.moveTo(0,130);
+        for(let x=0;x<420;x++){
+            ctx.lineTo(x,130 + Math.sin(x/30 + t)*30);
+        }
+        ctx.stroke();
+        t += 0.03;
+        requestAnimationFrame(loop);
+    }
+    loop();
+}
+
+function animateWind(ctx) {
+    let t = 0;
+    function loop() {
+        ctx.clearRect(0,0,420,260);
+        ctx.strokeStyle = "#90caf9";
+        for(let i=0;i<5;i++){
+            ctx.beginPath();
+            ctx.arc(210,130,30+i*15+Math.sin(t)*5,0,Math.PI*2);
+            ctx.stroke();
+        }
+        t += 0.02;
+        requestAnimationFrame(loop);
+    }
+    loop();
+}
+
+function animateHive(ctx) {
+    let t = 0;
+    function loop() {
+        ctx.clearRect(0,0,420,260);
+        ctx.fillStyle = "#fbc02d";
+        for(let y=90;y<180;y+=35){
+            for(let x=150;x<270;x+=35){
+                ctx.beginPath();
+                ctx.arc(x,y,10+Math.sin(t)*2,0,Math.PI*2);
+                ctx.fill();
+            }
+        }
+        t += 0.04;
+        requestAnimationFrame(loop);
+    }
+    loop();
+}
+
+function animateSeed(ctx) {
+    let t = 0;
+    function loop() {
+        ctx.clearRect(0,0,420,260);
+        ctx.fillStyle = "#388e3c";
+        ctx.beginPath();
+        ctx.arc(210,150,10+Math.sin(t)*4,0,Math.PI*2);
+        ctx.fill();
+        t += 0.05;
+        requestAnimationFrame(loop);
+    }
+    loop();
+}
+</script>
+</body>
+</html>
